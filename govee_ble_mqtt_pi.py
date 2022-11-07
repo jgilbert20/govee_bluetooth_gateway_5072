@@ -36,7 +36,7 @@ def on_message(client, userdata, msg):
     
 client = mqtt.Client()
 mqtt_prefix = "/sensor/govee"
-mqtt_gateway_name = "/upstairs/"
+mqtt_gateway_name = "/295harvard/"
 
 class ScanDelegate(DefaultDelegate):
     
@@ -48,17 +48,34 @@ class ScanDelegate(DefaultDelegate):
     def handleDiscovery(self, dev, isNewDev, isNewData):
         #if (dev.addr == "a4:c1:38:xx:xx:xx") or (dev.addr == "a4:c1:38:xx:xx:xx"):
         if dev.addr[:8]=="a4:c1:38":          
+
+
             
             #returns a list, of which the [2] item of the [3] tupple is manufacturing data
             adv_list = dev.getScanData()
-            
-            adv_manuf_data = adv_list[2][2]
-            
-            #print("manuf data = ", adv_manuf_data)
 
+            print("adv list data = ", adv_list)
+
+            complete_local_name = adv_list[0][2]
+
+            print("complete_local_name = ", complete_local_name)
+
+            if not complete_local_name.startswith( "GVH5072" )  :
+                return
+            
+            adv_manuf_data = adv_list[3][2]
+            
+            print("manuf data = ", adv_manuf_data)
+
+            
             #this is the location of the encoded temp/humidity and battery data
             temp_hum_data = adv_manuf_data[6:12]
             battery = adv_manuf_data[12:14]
+
+
+            print("temp_hum_data = ", temp_hum_data)
+            print("battery = ", battery)
+            
             
             #convert to integer
             val = (int(temp_hum_data, 16))
@@ -94,7 +111,7 @@ class ScanDelegate(DefaultDelegate):
             mac=dev.addr
             signal = dev.rssi
 
-            #print("mac=", mac, "   percent humidity ", hum_percent, "   temp_F = ", temp_F, "   battery percent=", battery_percent, "  rssi=", signal)
+            print("mac=", mac, "   percent humidity ", hum_percent, "   temp_F = ", temp_F, "   battery percent=", battery_percent, "  rssi=", signal)
             mqtt_topic = mqtt_prefix + mqtt_gateway_name + mac + "/"
 
             client.publish(mqtt_topic+"rssi", signal, qos=0)
@@ -107,7 +124,7 @@ class ScanDelegate(DefaultDelegate):
 scanner = Scanner().withDelegate(ScanDelegate())
 
 #replace localhost with your MQTT broker
-client.connect("localhost",1883,60)
+client.connect("295harvard.local",1883,60)
 
 client.on_connect = on_connect
 client.on_message = on_message
