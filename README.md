@@ -6,6 +6,39 @@ Jeremy: Adds support for 5072 sensors
 Install: sudo cp govee_gw.service /etc/systemd/system/
 
 
+# Full Install Instructions
+
+```
+
+sudo apt-get install emacs-nox git
+
+sudo apt-get install python3-pip libglib2.0-dev
+sudo pip3 install bluepy
+sudo apt install -y mosquitto mosquitto-clients
+sudo pip3 install paho-mqtt
+
+
+mkdir src
+cd src
+git clone https://github.com/jgilbert20/govee_bluetooth_gateway_5072.git
+
+cd govee_bluetooth_gateway_5072
+
+# verify working
+sudo python3 govee_ble_mqtt_pi.py
+
+# install service
+sudo systemctl enable govee_gw
+
+# start service
+sudo service govee_gw start
+
+# check mqtt
+mosquitto_sub -h localhost -t '#' -v
+
+```
+
+
 # govee_bluetooth_gateway
 **Bluetooth to MQTT gateway for Govee brand bluetooth sensors.**
 
