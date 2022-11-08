@@ -1,3 +1,11 @@
+
+# What is this fork
+
+Jeremy: Adds support for 5072 sensors
+
+Install: sudo cp govee_gw.service /etc/systemd/system/
+
+
 # govee_bluetooth_gateway
 **Bluetooth to MQTT gateway for Govee brand bluetooth sensors.**
 

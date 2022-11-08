@@ -1,0 +1,15 @@
+[Unit]
+Description=Govee MQTT Listening Service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/python3 /home/pi/src/govee_bluetooth_gateway_5072/govee_ble_mqtt_pi.py
+
+[Install]
+WantedBy=multi-user.target
+
